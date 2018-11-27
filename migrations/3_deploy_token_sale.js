@@ -41,7 +41,7 @@ module.exports = function (deployer, network) {
     const walletAddr = "0x0a0C2318D11807d465C6886A5A4707872fbdd82F";
     var cwpInstance = CWTPToken.at(CWTPToken.address), //CWTPToken.at("0x1ae18c56f7e0c1f466b4471a3724bb6f465838b2"),
       min = 60,
-      startTime = 1542380400,
+      startTime = ~~(Date.now() / 1000) + 100 ,      
       endTime = 1546300800,
       tsale;
 

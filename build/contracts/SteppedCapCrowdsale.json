@@ -328,9 +328,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity 0.4.24;\r\n\r\nimport \"./SteppedCrowdsale.sol\";\r\nimport \"openzeppelin-solidity/contracts/math/SafeMath.sol\";\r\n\r\n/**\r\n * @title SteppedCapCrowdsale\r\n * @dev Extension of Crowdsale contract that increases the price of tokens by steps. \r\n */\r\ncontract SteppedCapCrowdsale is SteppedCrowdsale {\r\n  using SafeMath for uint256;\r\n\r\n  event SetStepCap(uint256 indexed timestamp, uint256 step, uint256 oldCap, uint256 newCap);\r\n\r\n  mapping (uint8 => uint256) private _caps;\r\n  mapping (uint8 => uint256) private _tokensSold;\r\n\r\n  uint256 private _initCap;\r\n  uint256 private _minAmount;\r\n\r\n  constructor (uint256 initCap, uint256 minAmount) public {\r\n    _initCap = initCap;\r\n    _minAmount = minAmount;\r\n  }\r\n\r\n  function getStepCap(uint8 _step) public view returns(uint256) {\r\n    require(_step > 0 && _step <= getStepsCout());\r\n    if (_caps[_step] == 0)\r\n      return _initCap;\r\n    return _caps[_step];\r\n  }\r\n\r\n  function getStepTokenSold(uint8 _step) public view returns(uint256) {\r\n    require(_step > 0 && _step <= getStepsCout());\r\n    return _tokensSold[_step];\r\n  }\r\n\r\n  function _setStepCap(uint8 _step, uint256 _cap) internal {\r\n    require(_step > 0 && _step <= getStepsCout());\r\n    uint256 oldCap = _caps[_step];\r\n    _caps[_step] = _cap;\r\n    // solium-disable-next-line security/no-block-members\r\n    emit SetStepCap(block.timestamp, _step, oldCap, _caps[_step]);\r\n  }\r\n\r\n  function _setStepTokenSold(uint8 _step, uint256 _tokens) internal {\r\n    require(_step > 0 && _step <= getStepsCout());\r\n    _tokensSold[_step] = _tokensSold[_step].add(_tokens);\r\n  }\r\n\r\n  function getCurrentCap() public view returns (uint256) {\r\n    return getStepCap(getCurrentStep());\r\n  }\r\n  function getCurrentTokenSold() public view returns (uint256) {\r\n    return getStepTokenSold(getCurrentStep());\r\n  }\r\n\r\n  /**\r\n   * @dev Extend parent behavior requiring purchase to respect the funding cap.\r\n   * @param _beneficiary Token purchaser\r\n   * @param _weiAmount Amount of wei contributed\r\n   */\r\n  function _preValidatePurchase(address _beneficiary, uint256 _weiAmount) internal {\r\n    super._preValidatePurchase(_beneficiary, _weiAmount);\r\n    uint256 tokens = _getTokenAmount(_weiAmount);    \r\n    require(getCurrentCap().sub(getCurrentTokenSold()) < _minAmount || tokens >= _minAmount);\r\n    require(getCurrentTokenSold().add(tokens) <= getCurrentCap());\r\n  }\r\n\r\n  function _updatePurchasingState(address _beneficiary, uint256 _weiAmount) internal {\r\n    super._updatePurchasingState(_beneficiary, _weiAmount);\r\n    uint256 tokens = _getTokenAmount(_weiAmount);   \r\n    uint256 dep = (tokens % 1 ether);\r\n    _setStepTokenSold(getCurrentStep(), tokens.sub(dep));\r\n  }\r\n}\r\n",
-  "sourcePath": "C:\\Users\\mmaslich\\Documents\\GitHub\\cryptoworkplace.io\\res\\Etherium\\CWP\\contracts\\SteppedCapCrowdsale.sol",
+  "sourcePath": "C:\\Users\\maxwell\\Documents\\GitHub\\cryptoworkplcae.io-contracts\\contracts\\SteppedCapCrowdsale.sol",
   "ast": {
-    "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedCapCrowdsale.sol",
+    "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedCapCrowdsale.sol",
     "exportedSymbols": {
       "SteppedCapCrowdsale": [
         812
@@ -350,7 +350,7 @@
         "src": "0:23:4"
       },
       {
-        "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedCrowdsale.sol",
+        "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedCrowdsale.sol",
         "file": "./SteppedCrowdsale.sol",
         "id": 536,
         "nodeType": "ImportDirective",
@@ -4032,7 +4032,7 @@
     "src": "0:2676:4"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedCapCrowdsale.sol",
+    "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedCapCrowdsale.sol",
     "exportedSymbols": {
       "SteppedCapCrowdsale": [
         812
@@ -4052,7 +4052,7 @@
         "src": "0:23:4"
       },
       {
-        "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedCrowdsale.sol",
+        "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedCrowdsale.sol",
         "file": "./SteppedCrowdsale.sol",
         "id": 536,
         "nodeType": "ImportDirective",
@@ -7738,6 +7738,6 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "2.0.1",
-  "updatedAt": "2018-09-28T20:07:54.061Z"
+  "schemaVersion": "2.0.0",
+  "updatedAt": "2018-11-27T19:55:32.651Z"
 }

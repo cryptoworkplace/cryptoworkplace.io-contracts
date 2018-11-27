@@ -170,9 +170,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity 0.4.24;\r\n\r\nimport \"openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol\";\r\nimport \"openzeppelin-solidity/contracts/token/ERC20/ERC20.sol\";\r\nimport \"openzeppelin-solidity/contracts/math/SafeMath.sol\";\r\n\r\n\r\n/**\r\n * @title PostDeliveryCrowdsale\r\n * @dev Crowdsale that locks tokens from withdrawal until it ends.\r\n */\r\ncontract PostDeliveryCrowdsale is TimedCrowdsale {\r\n  using SafeMath for uint256;\r\n\r\n  mapping(address => uint256) public balances;\r\n  address[] private _balancesList;\r\n\r\n  /**\r\n   * @dev Withdraw tokens only after crowdsale ends.\r\n   */\r\n  function _withdrawTokens() internal {\r\n    require(hasClosed());\r\n    for(uint256 i = 0; i < _balancesList.length; i++)\r\n    {\r\n      uint256 amount = balances[_balancesList[i]];\r\n      require(amount > 0);\r\n      balances[_balancesList[i]] = 0;\r\n      _deliverTokens(_balancesList[i], amount);\r\n    }    \r\n  }\r\n\r\n  /**\r\n   * @dev Overrides parent by storing balances instead of issuing tokens right away.\r\n   * @param _beneficiary Token purchaser\r\n   * @param _tokenAmount Amount of tokens purchased\r\n   */\r\n  function _processPurchase(address _beneficiary, uint256 _tokenAmount) internal {\r\n    if (balances[_beneficiary] == 0)\r\n      _balancesList.push(_beneficiary);\r\n    balances[_beneficiary] = balances[_beneficiary].add(_tokenAmount);\r\n  }\r\n\r\n}\r\n",
-  "sourcePath": "C:\\Users\\mmaslich\\Documents\\GitHub\\cryptoworkplace.io\\res\\Etherium\\CWP\\contracts\\PostDeliveryCrowdsale.sol",
+  "sourcePath": "C:\\Users\\maxwell\\Documents\\GitHub\\cryptoworkplcae.io-contracts\\contracts\\PostDeliveryCrowdsale.sol",
   "ast": {
-    "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/PostDeliveryCrowdsale.sol",
+    "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/PostDeliveryCrowdsale.sol",
     "exportedSymbols": {
       "PostDeliveryCrowdsale": [
         474
@@ -1440,7 +1440,7 @@
     "src": "0:1346:2"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/PostDeliveryCrowdsale.sol",
+    "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/PostDeliveryCrowdsale.sol",
     "exportedSymbols": {
       "PostDeliveryCrowdsale": [
         474
@@ -2712,6 +2712,6 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "2.0.1",
-  "updatedAt": "2018-09-28T20:07:54.055Z"
+  "schemaVersion": "2.0.0",
+  "updatedAt": "2018-11-27T19:55:32.628Z"
 }

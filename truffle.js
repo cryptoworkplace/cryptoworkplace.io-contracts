@@ -12,9 +12,7 @@ module.exports = {
       network_id: "*" // Match any network id
     },
     ropsten: {
-      host: "104.209.40.23",
-      port: 8545,
-      //provider: new HDWalletProvider("", "http://104.209.40.23:8545/"),
+      provider: new HDWalletProvider(['priv_key'], "https://gethuser:9oglQxagolLkQN1Jzl@ethtestnode2.cryptoworkplace.io:9595"),
       network_id: 3,
       from: "0xc57e3ac95b372619cb7cfa41674a9183d18e4ed1",
       gas: 4612388,

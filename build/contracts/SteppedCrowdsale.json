@@ -226,9 +226,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity 0.4.24;\r\n\r\nimport \"openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol\";\r\nimport \"openzeppelin-solidity/contracts/math/SafeMath.sol\";\r\n\r\n/**\r\n * @title SteppedRateCrowdsale\r\n * @dev Extension of Crowdsale contract that count steps. \r\n */\r\ncontract SteppedCrowdsale is TimedCrowdsale {\r\n  using SafeMath\r\n  for uint256;\r\n\r\n  event AddStep(uint256 indexed timestamp, uint256 step, uint256 dueDate);\r\n\r\n  mapping(uint256 => uint8) private _stepsMap;\r\n  uint256[] private _stepsKeyList;\r\n  mapping(uint8 => uint256) public steps;\r\n\r\n  constructor() public {\r\n    _stepsMap[closingTime] = uint8(1);\r\n    steps[uint8(1)] = closingTime;\r\n  }\r\n\r\n  function _addStep(uint256 dueDate) internal returns(uint8) {\r\n    require(openingTime < dueDate);\r\n    require(closingTime > dueDate);\r\n    require(_stepsKeyList.length < 255);\r\n    require(_stepsKeyList.length == 0 || _stepsMap[_stepsKeyList[_stepsKeyList.length - 1]] < dueDate);\r\n\r\n    _stepsMap[dueDate] = uint8(_stepsKeyList.push(dueDate));\r\n    _stepsMap[closingTime] = uint8(_stepsKeyList.length + 1);\r\n    steps[_stepsMap[dueDate]] = dueDate;\r\n    steps[_stepsMap[closingTime]] = closingTime;\r\n    // solium-disable-next-line security/no-block-members\r\n    emit AddStep(block.timestamp, _stepsMap[dueDate], dueDate);\r\n    return _stepsMap[dueDate];\r\n  }\r\n\r\n  /**\r\n   * @dev Returns current step number. \r\n   * @return Current step number\r\n   */\r\n  function getCurrentStep() public view returns(uint8) {\r\n    uint256 key;\r\n    for (uint8 i = 0; i < _stepsKeyList.length; i++) {\r\n      key = _stepsKeyList[i];\r\n      // solium-disable-next-line security/no-block-members\r\n      if (block.timestamp < key)\r\n        break;\r\n    }\r\n\r\n    // solium-disable-next-line security/no-block-members\r\n    if (block.timestamp > key)\r\n    {\r\n      key = closingTime;\r\n    }\r\n\r\n    return _stepsMap[key];\r\n  }\r\n\r\n  function getStepsCout() public view returns(uint8) {\r\n    return uint8(_stepsKeyList.length + 1);\r\n  }\r\n}",
-  "sourcePath": "C:\\Users\\mmaslich\\Documents\\GitHub\\cryptoworkplace.io\\res\\Etherium\\CWP\\contracts\\SteppedCrowdsale.sol",
+  "sourcePath": "C:\\Users\\maxwell\\Documents\\GitHub\\cryptoworkplcae.io-contracts\\contracts\\SteppedCrowdsale.sol",
   "ast": {
-    "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedCrowdsale.sol",
+    "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedCrowdsale.sol",
     "exportedSymbols": {
       "SteppedCrowdsale": [
         1018
@@ -2933,7 +2933,7 @@
     "src": "0:1988:5"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedCrowdsale.sol",
+    "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedCrowdsale.sol",
     "exportedSymbols": {
       "SteppedCrowdsale": [
         1018
@@ -5642,6 +5642,6 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "2.0.1",
-  "updatedAt": "2018-09-28T20:07:54.073Z"
+  "schemaVersion": "2.0.0",
+  "updatedAt": "2018-11-27T19:55:32.645Z"
 }

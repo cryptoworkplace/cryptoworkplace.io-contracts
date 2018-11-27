@@ -316,9 +316,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity 0.4.24;\r\n\r\nimport \"./SteppedCrowdsale.sol\";\r\nimport \"openzeppelin-solidity/contracts/math/SafeMath.sol\";\r\n\r\n/**\r\n * @title SteppedRateCrowdsale\r\n * @dev Extension of Crowdsale contract that increases the price of tokens by steps. \r\n */\r\ncontract SteppedRateCrowdsale is SteppedCrowdsale {\r\n  using SafeMath for uint256;\r\n\r\n  event UsdRateUpdated(uint256 indexed timestamp, uint256 oldRate, uint256 newRate);\r\n  event SetStepRate(uint256 indexed timestamp, uint256 step, uint256 oldRate, uint256 newRate);\r\n\r\n  mapping (uint8 => uint256) private _rates;\r\n  uint256 private _ETH_USD;\r\n\r\n  function getStepRate(uint8 step) public view returns(uint256) {\r\n    require(step > 0 && step <= getStepsCout());\r\n    if (_rates[step] == 0)\r\n      return rate;\r\n    return _rates[step];\r\n  }\r\n\r\n  function _setStepRate(uint8 step, uint256 rate) internal {\r\n    require(step > 0 && step <= getStepsCout());\r\n    uint256 oldRate = _rates[step];\r\n    _rates[step] = rate;\r\n    // solium-disable-next-line security/no-block-members\r\n    emit SetStepRate(block.timestamp, step, oldRate, _rates[step]);\r\n  }\r\n\r\n  /**\r\n   * @dev Returns the rate of tokens per wei at the present time. \r\n   * Note that, as price _increases_ with time, the rate _decreases_. \r\n   * @return The number of tokens a buyer gets per wei at a given time\r\n   */\r\n  function getCurrentRate() public view returns (uint256) {\r\n    return getStepRate(getCurrentStep());\r\n  }\r\n\r\n  /**\r\n   * @dev Overrides arent method taking into account variable rate.\r\n   * @param _weiAmount The value in wei to be converted into tokens\r\n   * @return The number of tokens _weiAmount wei will buy at present time\r\n   */\r\n  function _getTokenAmount(uint256 _weiAmount) internal view returns (uint256) {\r\n    uint256 currentRate = getCurrentRate();\r\n    uint256 tokens = _weiAmount.mul(_ETH_USD).div(currentRate);\r\n    return tokens;\r\n  }\r\n\r\n  function getEthUsdRate() public view returns(uint256) {\r\n    return _ETH_USD;\r\n  }\r\n\r\n  function _setEthUsdRate(uint256 usdRate) internal {\r\n    uint256 oldRate = _ETH_USD;\r\n    _ETH_USD = usdRate;\r\n    // solium-disable-next-line security/no-block-members\r\n    emit UsdRateUpdated(block.timestamp, oldRate, _ETH_USD);\r\n  }\r\n}\r\n",
-  "sourcePath": "C:\\Users\\mmaslich\\Documents\\GitHub\\cryptoworkplace.io\\res\\Etherium\\CWP\\contracts\\SteppedRateCrowdsale.sol",
+  "sourcePath": "C:\\Users\\maxwell\\Documents\\GitHub\\cryptoworkplcae.io-contracts\\contracts\\SteppedRateCrowdsale.sol",
   "ast": {
-    "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedRateCrowdsale.sol",
+    "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedRateCrowdsale.sol",
     "exportedSymbols": {
       "SteppedRateCrowdsale": [
         1189
@@ -338,7 +338,7 @@
         "src": "0:23:6"
       },
       {
-        "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedCrowdsale.sol",
+        "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedCrowdsale.sol",
         "file": "./SteppedCrowdsale.sol",
         "id": 1021,
         "nodeType": "ImportDirective",
@@ -2498,7 +2498,7 @@
     "src": "0:2222:6"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedRateCrowdsale.sol",
+    "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedRateCrowdsale.sol",
     "exportedSymbols": {
       "SteppedRateCrowdsale": [
         1189
@@ -2518,7 +2518,7 @@
         "src": "0:23:6"
       },
       {
-        "absolutePath": "/C/Users/mmaslich/Documents/GitHub/cryptoworkplace.io/res/Etherium/CWP/contracts/SteppedCrowdsale.sol",
+        "absolutePath": "/C/Users/maxwell/Documents/GitHub/cryptoworkplcae.io-contracts/contracts/SteppedCrowdsale.sol",
         "file": "./SteppedCrowdsale.sol",
         "id": 1021,
         "nodeType": "ImportDirective",
@@ -4682,6 +4682,6 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "2.0.1",
-  "updatedAt": "2018-09-28T20:07:54.064Z"
+  "schemaVersion": "2.0.0",
+  "updatedAt": "2018-11-27T19:55:32.642Z"
 }
